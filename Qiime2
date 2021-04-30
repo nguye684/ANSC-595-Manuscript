@@ -124,6 +124,29 @@ qiime emperor plot \
 --p-custom-axes Sampling_day \
 --o-visualization core-metrics-results/bray-curtis-emperor-days-since-experiment-start.qzv
 
+#ANCOM
+
+qiime feature-table filter-samples \
+--i-table table-paired.qza \
+--m-metadata-file metadata.tsv \
+--p-where "[Delivery_mode]='CS'" \
+--o-filtered-table CS-table.qza
+
+qiime taxa collapse \
+--i-table CS-table.qza \
+--i-taxonomy taxonomy-paired.qza \
+--p-level 6 \
+--o-collapsed-table CS-table-l6.qza
+
+#PERMENOVA Adonis
+
+qiime diversity adonis \
+--i-distance-matrix core-metrics-results-paired1/weighted_unifrac_distance_matrix.qza \
+--m-metadata-file metadata.tsv \
+--p-formula "Delivery_mode+Feeding" \
+--o-visualization core-metrics-results-paired1/weightedadonis.qzv
+
+
 #Random Forest
 qiime sample-classifier classify-samples \
 --i-table table.qza \
